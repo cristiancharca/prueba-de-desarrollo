@@ -1,0 +1,88 @@
+<?php
+
+	session_start();
+
+	require_once "../model/Usuario.php";
+
+	$objusuario = new usuario();
+
+	switch ($_GET["op"]) {
+
+		case 'SaveOrUpdate':	
+			$alm = 0;	
+			$comp = 0;	
+			$vent = 0;	
+			$mant = 0;	
+			$seg = 0;	
+			$cons_comp = 0;		
+			$cons_vent = 0;		
+			$admin = 0;		
+
+			$idsucursal = $_POST["cboSucursal"];
+			$idempleado = $_POST["txtIdEmpleado"];
+			$tipo_usuario = $_POST["cboTipoUsuario"];
+	
+
+					if(empty($_POST["txtIdUsuario"])){
+					
+					if($objusuario->Registrar($idsucursal, $idempleado, $tipo_usuario, $alm, $comp, $vent, $mant, $seg, $cons_comp, 
+						$cons_vent, $admin)){
+						echo "Registrado Exitosamente";
+					}else{
+						echo "Usuario no ha podido ser registado.";
+					}
+				}else{
+					
+					$idusuario = $_POST["txtIdUsuario"];
+					if($objusuario->Modificar($idusuario, $idsucursal, $idempleado, $tipo_usuario, $alm, $comp, $vent, $mant, $seg, $cons_comp, 
+						$cons_vent, $admin)){
+						echo "Informacion del Usuario ha sido actualizada";
+					}else{
+						echo "Informacion del usuario no ha podido ser actualizada.";
+					}
+				}
+
+			break;
+
+		case "delete":			
+			
+			$id = $_POST["id"];
+			$result = $objusuario->Eliminar($id);
+			if ($result) {
+				echo "Eliminado Exitosamente";
+			} else {
+				echo "No fue Eliminado";
+			}
+			break;
+		
+
+      case "IngresarSistema":
+
+	    	$user = $_REQUEST["user"];
+			$pass = $_REQUEST["pass"];
+			
+			$query = $objusuario->Ingresar_Sistema($user, md5($pass));
+			$fetch = $query->fetch_object();
+			
+			echo json_encode($fetch);
+			
+			
+			if(isset($fetch)){
+				$_SESSION["idusuario"] = $fetch->idusuario;
+				$_SESSION["tipo_documento"] = $fetch->tipo_documento;
+				$_SESSION["tipo_usuario"] = $fetch->tipo_usuario;
+				$_SESSION["num_documento"] = $fetch->num_documento;
+
+			}
+			break;
+
+
+		case "Salir":
+			session_unset();
+			session_destroy();
+			header("Location:../");
+			break;
+
+
+	}
+	
