@@ -37,6 +37,10 @@ CREATE TABLE `empleado` (
   `telefono` varchar(20) NOT NULL,
   `email` varchar(70) NOT NULL,
   `fecha_nacimiento` date NOT NULL
+  `foto` varchar(50) NOT NULL,
+  `login` varchar(50) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `estado` varchar(1) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -49,8 +53,6 @@ CREATE TABLE `usuario` (
   `idusuario` int(11) NOT NULL,
   `idempleado` int(11) NOT NULL,
   `tipo_usuario` varchar(20) NOT NULL,
-  `login` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL,
   `fecha_registro` date NOT NULL,
   `estado` char(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
